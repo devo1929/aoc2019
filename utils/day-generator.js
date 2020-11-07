@@ -16,11 +16,12 @@
 const path = require('path');
 const fileUtils = require('./file-utils');
 const fs = require('fs');
+const prompt = require('prompt-sync')();
 
-const day = process.argv[2];
+const day = prompt('specify day #: ');
 
 if (!day) {
-    throw 'No day specified as argument';
+    throw 'No day specified';
 }
 
 updatePackage();
@@ -34,7 +35,7 @@ function updatePackage() {
     const _package = JSON.parse(packageJson);
 
     if (!_package.scripts.hasOwnProperty(day)) {
-        _package.scripts[day] = `node days/${day}.js`;
+        _package.scripts[`day${day}`] = `node days/day${day}.js`;
         fs.writeFileSync(packageJsonPath, JSON.stringify(_package, null, 2));
     }
 }
@@ -42,17 +43,22 @@ function updatePackage() {
 function createFile(fullPath) {
     if (!fs.existsSync(fullPath)) {
         fs.writeFileSync(fullPath, '');
+        console.log(`${fullPath} created`);
     }
 }
 
 function createDayInputFiles() {
-    const dayInputFilePath = path.join(__dirname, '..', 'inputs', `${day}.txt`);
-    const dayInputExampleFilePath = path.join(__dirname, '..', 'inputs', `${day}-example.txt`);
+    const dayInputFilePath = path.join(__dirname, '..', 'inputs', `day${day}.txt`);
+    const dayInputExampleFilePath = path.join(__dirname, '..', 'inputs', `day${day}-example.txt`);
     createFile(dayInputFilePath);
     createFile(dayInputExampleFilePath);
 }
 
 function createDayScriptFile() {
-    const dayScriptFilePath = path.join(__dirname, '..', 'days', `${day}.js`);
+    const dayScriptFilePath = path.join(__dirname, '..', 'days', `day${day}.js`);
     createFile(dayScriptFilePath);
+}
+
+function verifyDayAlreadyExists() {
+
 }
