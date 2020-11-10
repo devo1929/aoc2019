@@ -24,7 +24,8 @@ exports.readLines = function (filePath) {
         .filter(line => {
             // no empty lines
             return !!line;
-        });
+        })
+        .map(line => line.trim());
 };
 
 const getInputFilePath = function (inputFileName) {
